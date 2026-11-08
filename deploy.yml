@@ -1,0 +1,19 @@
+---
+- name: Provision Debian hosts
+  hosts: all
+  become: true
+  roles:
+    - role: rpi_boot_config
+      tags: rpi_boot_config
+    - role: fail2ban
+      tags: fail2ban
+    - role: ssh
+      tags: ssh
+    - role: firewalld
+      tags: firewalld
+    - role: unattended_upgrades
+      tags: unattended_upgrades
+    - role: podman
+      tags: podman
+    - role: cockpit
+      tags: cockpit

@@ -1,0 +1,47 @@
+---
+- name: Install firewalld
+  ansible.builtin.apt:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld is running and enabled
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Bind the local network to the home zone
+  ansible.posix.firewalld:
+    zone: home
+    source: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
+    state: enabled
+    permanent: true
+    immediate: true
+    offline: true
+
+- name: Configure home zone services
+  ansible.posix.firewalld:
+    zone: home
+    service: "{{ item.service }}"
+    state: "{{ item.state }}"
+    permanent: true
+    immediate: true
+    offline: true
+  loop:
+    - { service: cockpit, state: enabled }
+    - { service: http, state: enabled }
+    - { service: https, state: enabled }
+    - { service: ssh, state: enabled }
+
+- name: Configure public zone services
+  ansible.posix.firewalld:
+    zone: public
+    service: "{{ item.service }}"
+    state: "{{ item.state }}"
+    permanent: true
+    immediate: true
+    offline: true
+  loop:
+    - { service: http, state: enabled }
+    - { service: https, state: enabled }
+    - { service: ssh, state: disabled }

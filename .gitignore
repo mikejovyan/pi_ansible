@@ -1,0 +1,6 @@
+.ansible
+.cache
+
+/*.yml
+!/deploy.yml
+!/requirements.yml

@@ -1,0 +1,11 @@
+---
+- name: Install Cockpit
+  ansible.builtin.apt:
+    name:
+      - cockpit
+      - cockpit-files
+      - cockpit-networkmanager
+      - cockpit-packagekit
+      - cockpit-podman
+      - cockpit-storaged
+    state: present

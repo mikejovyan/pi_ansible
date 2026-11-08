@@ -1,0 +1,7 @@
+# Ansible managed
+Types: deb
+URIs: https://{{ podman_apt_owner }}:{{ podman_apt_token }}@{{ podman_apt_host }}/api/packages/{{ podman_apt_owner }}/debian
+Suites: trixie
+Components: main
+Enabled: yes
+Signed-By: /etc/apt/keyrings/forgejo-{{ podman_apt_owner }}.asc

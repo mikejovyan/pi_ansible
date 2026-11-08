@@ -1,0 +1,12 @@
+---
+# Copy to <hostname>.yml and fill in real values.
+all:
+  hosts:
+    <HOSTNAME>:
+      ansible_host: <IP_ADDRESS>
+      ansible_user: <USER>
+      ansible_ssh_private_key_file: ~/.ssh/<KEY_FILE>
+  vars:
+    # ssh_sudoers_passwordless_users:
+    #   - "{{ ansible_user }}"
+    # rpi_boot_config_content: see roles/rpi_boot_config/files/default_config.txt

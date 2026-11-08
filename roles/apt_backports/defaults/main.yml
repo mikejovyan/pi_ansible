@@ -1,0 +1,3 @@
+---
+apt_backports_suites: trixie-backports
+apt_backports_types: deb

@@ -1,0 +1,19 @@
+---
+- name: Write the sshd hardening drop-in
+  ansible.builtin.template:
+    src: 00-ansible-ssh.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-ansible-ssh.conf
+    mode: "0644"
+    validate: "sshd -t -f %s"
+  notify: reload sshd
+
+- name: Allow passwordless sudo for configured users
+  community.general.sudoers:
+    name: "00-ansible-nopasswd-{{ item }}"
+    state: present
+    user: "{{ item }}"
+    runas: ALL
+    commands: ALL
+    nopassword: true
+    validation: required
+  loop: "{{ ssh_sudoers_passwordless_users }}"

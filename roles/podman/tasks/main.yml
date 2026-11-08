@@ -1,0 +1,43 @@
+---
+- name: Install the Forgejo apt registry's signing key
+  ansible.builtin.get_url:
+    url: "https://{{ podman_apt_host }}/api/packages/{{ podman_apt_owner }}/debian/repository.key"
+    dest: "/etc/apt/keyrings/forgejo-{{ podman_apt_owner }}.asc"
+    url_username: "{{ podman_apt_owner }}"
+    url_password: "{{ podman_apt_token }}"
+    mode: "0644"
+  no_log: true
+
+- name: Write the podman apt source
+  ansible.builtin.template:
+    src: forgejo-podman.sources.j2
+    dest: /etc/apt/sources.list.d/forgejo-podman.sources
+    mode: "0600"
+  no_log: true
+
+- name: Install aardvark-dns, netavark and podman from apt registry
+  ansible.builtin.apt:
+    name:
+      - aardvark-dns
+      - netavark
+      - podman
+    state: latest
+    update_cache: true
+    cache_valid_time: 3600
+    fail_on_autoremove: true
+
+- name: Look up the user's UID (needed for XDG_RUNTIME_DIR below)
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ ansible_user }}"
+
+- name: Enable podman-auto-update.timer
+  ansible.builtin.systemd:
+    name: podman-auto-update.timer
+    scope: user
+    state: started
+    enabled: true
+  become: true
+  become_user: "{{ ansible_user }}"
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.getent_passwd[ansible_user][1] }}"

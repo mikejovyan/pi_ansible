@@ -1,0 +1,30 @@
+---
+- name: Read the device tree model
+  ansible.builtin.slurp:
+    src: /proc/device-tree/model
+  register: rpi_boot_config_model
+  failed_when: false
+
+- name: Back up and install the full boot config
+  when: >
+    'Raspberry Pi' in (rpi_boot_config_model['content'] | default('') | b64decode)
+    and rpi_boot_config_content is defined
+  block:
+    - name: Check whether the boot config is going to change
+      ansible.builtin.copy:
+        content: "{{ rpi_boot_config_content }}"
+        dest: "{{ rpi_boot_config_path }}"
+      check_mode: true
+      register: rpi_boot_config_would_change
+
+    - name: Back up the current boot config
+      ansible.builtin.copy:
+        src: "{{ rpi_boot_config_path }}"
+        dest: "{{ rpi_boot_config_path }}.bak"
+        remote_src: true
+      when: rpi_boot_config_would_change.changed
+
+    - name: Install the full boot config
+      ansible.builtin.copy:
+        content: "{{ rpi_boot_config_content }}"
+        dest: "{{ rpi_boot_config_path }}"

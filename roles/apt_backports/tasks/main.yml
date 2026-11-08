@@ -1,0 +1,12 @@
+---
+- name: Write the apt_backports sources file
+  ansible.builtin.template:
+    src: 00-ansible-apt_backports.sources.j2
+    dest: /etc/apt/sources.list.d/00-ansible-apt_backports.sources
+    mode: "0644"
+  register: apt_backports_sources
+
+- name: Update apt cache if the backports source was just added
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_backports_sources.changed
