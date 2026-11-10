@@ -5,6 +5,8 @@
   roles:
     - role: rpi_boot_config
       tags: rpi_boot_config
+    - role: journald
+      tags: journald
     - role: fail2ban
       tags: fail2ban
     - role: ssh
