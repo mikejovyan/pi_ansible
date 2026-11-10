@@ -1,8 +1,8 @@
 ---
 - name: Write the apt_backports sources file
   ansible.builtin.template:
-    src: 00-ansible-apt_backports.sources.j2
-    dest: /etc/apt/sources.list.d/00-ansible-apt_backports.sources
+    src: 00-ansible-apt-backports.sources.j2
+    dest: /etc/apt/sources.list.d/00-ansible-apt-backports.sources
     mode: "0644"
   register: apt_backports_sources
 
