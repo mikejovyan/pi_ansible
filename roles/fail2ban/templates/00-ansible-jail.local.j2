@@ -1,6 +1,20 @@
 # Ansible managed
+[DEFAULT]
+bantime.increment = true
+ignoreip = 127.0.0.1/8 ::1 {{ firewalld_home_sources | join(' ') }}
+
 [sshd]
-enabled = true
-port    = 22
-filter  = sshd
-backend = systemd
+enabled  = true
+port     = 22
+filter   = sshd
+backend  = systemd
+maxretry = 5
+findtime = 600
+
+[forgejo]
+enabled      = true
+filter       = forgejo
+backend      = systemd
+journalmatch = _SYSTEMD_USER_UNIT=forgejo.service
+maxretry     = 5
+findtime     = 600

@@ -18,6 +18,13 @@
     mode: "0644"
   notify: reload fail2ban
 
+- name: Write the forgejo filter
+  ansible.builtin.template:
+    src: 00-ansible-forgejo.conf.j2
+    dest: /etc/fail2ban/filter.d/forgejo.conf
+    mode: "0644"
+  notify: reload fail2ban
+
 - name: Ensure fail2ban is running and enabled
   ansible.builtin.systemd:
     name: fail2ban
