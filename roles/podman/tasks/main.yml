@@ -5,6 +5,7 @@
     dest: "/etc/apt/keyrings/forgejo-{{ podman_apt_owner }}.asc"
     url_username: "{{ podman_apt_owner }}"
     url_password: "{{ podman_apt_token }}"
+    checksum: "{{ podman_apt_key_checksum }}"
     mode: "0644"
   no_log: true
 
