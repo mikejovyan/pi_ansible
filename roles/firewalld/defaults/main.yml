@@ -1,0 +1,14 @@
+---
+firewalld_home_sources:
+  - "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
+
+firewalld_home_services:
+  - { service: cockpit, state: enabled }
+  - { service: http, state: enabled }
+  - { service: https, state: enabled }
+  - { service: ssh, state: enabled }
+
+firewalld_public_services:
+  - { service: http, state: enabled }
+  - { service: https, state: enabled }
+  - { service: ssh, state: disabled }

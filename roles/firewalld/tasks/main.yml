@@ -10,14 +10,15 @@
     state: started
     enabled: true
 
-- name: Bind the local network to the home zone
+- name: Bind trusted sources to the home zone
   ansible.posix.firewalld:
     zone: home
-    source: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
+    source: "{{ item }}"
     state: enabled
     permanent: true
     immediate: true
     offline: true
+  loop: "{{ firewalld_home_sources }}"
 
 - name: Configure home zone services
   ansible.posix.firewalld:
@@ -27,11 +28,7 @@
     permanent: true
     immediate: true
     offline: true
-  loop:
-    - { service: cockpit, state: enabled }
-    - { service: http, state: enabled }
-    - { service: https, state: enabled }
-    - { service: ssh, state: enabled }
+  loop: "{{ firewalld_home_services }}"
 
 - name: Configure public zone services
   ansible.posix.firewalld:
@@ -41,7 +38,4 @@
     permanent: true
     immediate: true
     offline: true
-  loop:
-    - { service: http, state: enabled }
-    - { service: https, state: enabled }
-    - { service: ssh, state: disabled }
+  loop: "{{ firewalld_public_services }}"
