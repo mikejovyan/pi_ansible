@@ -19,3 +19,5 @@
       tags: podman
     - role: cockpit
       tags: cockpit
+    - role: quadlets
+      tags: quadlets

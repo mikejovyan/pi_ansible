@@ -1,0 +1,30 @@
+---
+- name: Clone/update the quadlets repo cache
+  ansible.builtin.git:
+    repo: "{{ quadlets_repo_url }}"
+    dest: "{{ quadlets_cache_path }}"
+    version: main
+    force: true
+  delegate_to: localhost
+  become: false
+
+- name: Ensure the systemd quadlet directory exists
+  ansible.builtin.file:
+    path: "{{ quadlets_config_path }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Look up the user's UID (needed for XDG_RUNTIME_DIR below)
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ ansible_user }}"
+
+- name: Sync quadlet service directories
+  ansible.builtin.copy:
+    src: "{{ quadlets_cache_path }}/{{ item }}/"
+    dest: "{{ quadlets_config_path }}/{{ item }}/"
+    owner: "{{ ansible_user }}"
+    mode: preserve
+  loop: "{{ quadlets_services }}"
+  notify: daemon-reload quadlets

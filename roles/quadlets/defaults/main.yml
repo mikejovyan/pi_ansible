@@ -1,0 +1,5 @@
+---
+quadlets_cache_path: ~/.cache/pi_ansible/quadlets
+quadlets_config_path: "/home/{{ ansible_user }}/.config/containers/systemd"
+quadlets_repo_url: ""
+quadlets_services: []
