@@ -1,2 +1,3 @@
 ---
-ssh_sudoers_passwordless_users: []
+ssh_sudoers_passwordless_users:
+  - "{{ ansible_user }}"
