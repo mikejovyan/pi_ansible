@@ -1,3 +1,5 @@
 ---
 podman_apt_key_checksum: ""
 podman_apt_token: ""
+podman_config_path: "/home/{{ ansible_user }}/.config/containers"
+podman_rootless_unprivileged_port_start: 80

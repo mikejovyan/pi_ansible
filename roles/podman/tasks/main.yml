@@ -27,6 +27,43 @@
     cache_valid_time: 3600
     fail_on_autoremove: true
 
+- name: Allow rootless containers to bind privileged ports
+  ansible.builtin.template:
+    src: 00-ansible-podman-rootless.conf.j2
+    dest: /etc/sysctl.d/00-ansible-podman-rootless.conf
+    mode: "0644"
+  notify: apply sysctl
+
+- name: Ensure the user's podman config directory exists
+  ansible.builtin.file:
+    path: "{{ podman_config_path }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Write podman config files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ podman_config_path }}/{{ item }}"
+    owner: "{{ ansible_user }}"
+    mode: "0644"
+  loop:
+    - containers.conf
+    - policy.json
+
+- name: Write the container registry login
+  ansible.builtin.template:
+    src: auth.json.j2
+    dest: "{{ podman_config_path }}/auth.json"
+    owner: "{{ ansible_user }}"
+    mode: "0600"
+  no_log: true
+
+- name: Keep the user's systemd services running when not logged in
+  ansible.builtin.command: "loginctl enable-linger {{ ansible_user }}"
+  args:
+    creates: "/var/lib/systemd/linger/{{ ansible_user }}"
+
 - name: Look up the user's UID (needed for XDG_RUNTIME_DIR below)
   ansible.builtin.getent:
     database: passwd

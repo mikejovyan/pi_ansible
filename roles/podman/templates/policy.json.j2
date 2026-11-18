@@ -1,0 +1,46 @@
+{
+  "default": [
+    {
+      "type": "reject"
+    }
+  ],
+  "transports": {
+    "docker": {
+      "registry.fedoraproject.org": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "quay.io": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "docker.io": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "ghcr.io": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "codeberg.org": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "code.forgejo.org": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ],
+      "{{ podman_apt_host }}": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ]
+    }
+  }
+}

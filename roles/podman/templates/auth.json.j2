@@ -1,0 +1,7 @@
+{
+  "auths": {
+    "{{ podman_apt_host }}": {
+      "auth": "{{ (podman_apt_owner + ':' + podman_apt_token) | b64encode }}"
+    }
+  }
+}
