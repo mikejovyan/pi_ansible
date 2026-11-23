@@ -16,10 +16,11 @@
     mode: "0600"
   no_log: true
 
-- name: Install aardvark-dns, netavark and podman from apt registry
+- name: Install aardvark-dns, conmon, netavark and podman from apt registry
   ansible.builtin.apt:
     name:
       - aardvark-dns
+      - conmon
       - netavark
       - podman
     state: latest
